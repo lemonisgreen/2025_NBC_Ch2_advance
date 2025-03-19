@@ -11,31 +11,49 @@ struct BaseballGame {
     
     func start() {
         let randomNumbers = generateRandomNumbers()
-        
+
         print("""
                 🍋 Welcom to LEMONY's Hatch Game 
                 Your mission: Decode the 3-digit secret number to hatch the eggs!
             
                 [Rules] 
                   
-                Enter 3 different numbers between 0 to 9
+                Enter 3 different numbers between 0 and 9 until all the eggs are hatched.
                 ** Notice! The secret code does not start with 0(zero) **
             
                 🐥 = correct number, correct position. 
                 🐣 = correct number, wrong position. 
                 🥚 = wrong number, wrong position.
+                ** Notice! The position of the eggs is not related to the position of the numbers.
+            
+                ---------------------------------------------------------------------------------
+                1. START GAME  2. GAME HISTORY  3. EXIT GAME
             
             """)
-        
-        while true {
-            guard let userAnswer = getUserNumbers() else { continue } // 원하는 유저 앤서를 못 받으면 다시 while의 처음으로 돌아가는 코드
-            
-            let result = compareNumbers(randomNumbers: randomNumbers, userAnswer: userAnswer)
-            print(result)
-            
-            if userAnswer == randomNumbers {
-                print("congratulations! All eggs hatched. Quit the game.")
-                break
+        var isGameRunning = true
+        while isGameRunning {
+            print("Please select option number.")
+            guard let selectedOptionNumber = readLine() else { continue }
+            switch selectedOptionNumber {
+            case "1":
+                print("Welcome to the Hatch Game! 🐥🐣🥚")
+                guard let userAnswer = getUserNumbers() else { continue } // 원하는 유저 앤서를 못 받으면 다시 while의 처음으로 돌아가는 코드
+                
+                let result = compareNumbers(randomNumbers: randomNumbers, userAnswer: userAnswer)
+                print(result)
+                
+                if userAnswer == randomNumbers {
+                    print("congratulations! All eggs hatched. Quit the game.")
+                    break
+                }
+                
+            case "2":
+                print("not ready")
+                
+            case "3":
+                print("not ready")
+            default:
+                print("Please enter the correct number.")
             }
         }
     }
@@ -75,7 +93,7 @@ struct BaseballGame {
     
     
     func getUserNumbers() -> [Int]? {
-        print ("Please enter 3 different numbers between 0 to 9 ")
+        print ("Please enter 3 different numbers between 0 and 9 ")
         
         guard let userNumbers = readLine() else {
             return nil
@@ -93,7 +111,7 @@ struct BaseballGame {
         }
         // .allSatisty = collection 타입에서 컬렉션의 모든 요소가 주어진 조건을 만족하느냐 ~= 패턴매칭연산자. 주로 switch문에서 사용되며, 특정 값이 범위 내에 포함되어 있는지 확인할 때 씀
         guard userAnswer.allSatisfy({ 0...9 ~= $0 }) else {
-            print ("Please enter numbers between 0 to 9")
+            print ("Please enter numbers between 0 and 9")
             return nil
         }
         
@@ -108,18 +126,17 @@ struct BaseballGame {
     func compareNumbers(randomNumbers: [Int], userAnswer: [Int]) -> String {
         var fullHatch = 0
         var halfHatch = 0
+        var unhatch = 0
         
         for i in 0..<3 {
             if randomNumbers[i] == userAnswer[i] {
                 fullHatch += 1
             } else if randomNumbers.contains(userAnswer[i]) {
                 halfHatch += 1
+            } else if !randomNumbers.contains(userAnswer[i]) {
+                unhatch += 1
             }
         }
-        if fullHatch == 0 && halfHatch == 0 {
-            return "🥚🥚🥚"
-        } else {
-            return String(repeating: "🐥", count: fullHatch) + String(repeating: "🐣", count: halfHatch)
-        }
+        return String(repeating: "🐥", count: fullHatch) + String(repeating: "🐣", count: halfHatch) + String(repeating: "🥚", count: unhatch)
     }
 }
