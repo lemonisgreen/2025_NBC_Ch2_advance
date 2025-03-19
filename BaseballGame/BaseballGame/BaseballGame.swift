@@ -8,6 +8,10 @@
 import Foundation
 
 struct BaseballGame {
+    
+    private var randomNumbers: [Int] = []
+    private var userAnswer: [Int]?
+    
     func start() {
         let answer = generateRandomNumbers()
         print("""
@@ -68,7 +72,7 @@ struct BaseballGame {
             print("Please enter 3 numbers")
             return nil
         }
-        
+        // .allSatisty = collection 타입에서 컬렉션의 모든 요소가 주어진 조건을 만족하느냐 ~= 패턴매칭연산자. 주로 switch문에서 사용되며, 특정 값이 범위 내에 포함되어 있는지 확인할 때 씀
         guard userAnswer.allSatisfy({ 1...9 ~= $0 }) else {
             print ("Please enter numbers between 1 to 9")
             return nil
@@ -80,5 +84,23 @@ struct BaseballGame {
         }
         
         return userAnswer
+    }
+    
+    func compareNumbers(randomNumbers: [Int], userAnswer: [Int]) -> String {
+        var fullHatch = 0
+        var halfHatch = 0
+        
+        for i in 0..<3 {
+            if randomNumbers[i] == userAnswer[i] {
+                fullHatch += 1
+            } else if randomNumbers.contains(userAnswer) {
+                halfHatch += 1
+            }
+        }
+        if fullHatch == 0 && halfHatch == 0 {
+            return "🥚"
+        } else {
+            return String(repeating: "🐥", count: fullHatch) + String(repeating: "🐣", count: halfHatch)
+        }
     }
 }
