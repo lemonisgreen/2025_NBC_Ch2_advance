@@ -9,11 +9,9 @@ import Foundation
 
 struct BaseballGame {
     
-    private var randomNumbers: [Int] = []
-    private var userAnswer: [Int]?
-    
     func start() {
-        let answer = generateRandomNumbers()
+        let randomNumbers = generateRandomNumbers()
+        
         print("""
                 🍋 Welcom to LEMONY's Hatch Game 
 
@@ -22,6 +20,19 @@ struct BaseballGame {
                 🐣 = correct number, wrong position. 
                 🥚 = wrong number, wrong position.
             """)
+        
+        while true {
+            guard let userAnswer = getUserNumbers() else { continue } // 유저 앤서를 못 받으면 다시 while의 처음으로 돌아가는 코드
+            
+            let result = compareNumbers(randomNumbers: randomNumbers, userAnswer: userAnswer)
+                print(result)
+            
+            if userAnswer == randomNumbers {
+                print("congratulations! All eggs hatched. Quit the game.")
+                break
+            }
+        }
+        
         
     }
     func generateRandomNumbers() -> [Int] {
@@ -93,7 +104,7 @@ struct BaseballGame {
         for i in 0..<3 {
             if randomNumbers[i] == userAnswer[i] {
                 fullHatch += 1
-            } else if randomNumbers.contains(userAnswer) {
+            } else if randomNumbers.contains(userAnswer[i]) {
                 halfHatch += 1
             }
         }
