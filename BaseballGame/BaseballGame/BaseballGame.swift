@@ -10,8 +10,10 @@ import Foundation
 struct BaseballGame {
     
     func start() {
-        let randomNumbers = generateRandomNumbers()
-
+        var isGameRunning = true
+        while isGameRunning {
+        // 조건에 따라 언제 끝날지 모르니까... while문 쓰기
+            
         print("""
                 🍋 Welcom to LEMONY's Hatch Game 
                 Your mission: Decode the 3-digit secret number to hatch the eggs!
@@ -30,13 +32,17 @@ struct BaseballGame {
                 1. START GAME  2. GAME HISTORY  3. EXIT GAME
             
             """)
-        var isGameRunning = true
-        while isGameRunning {
+            
             print("Please select option number.")
-            guard let selectedOptionNumber = readLine() else { continue }
+            guard let selectedOptionNumber = readLine() else { continue } // 마찬가지로 원하는 옵션 넘버를 못 받으면 다시 돌아감
+            
             switch selectedOptionNumber {
             case "1":
-                print("Welcome to the Hatch Game! 🐥🐣🥚")
+                print("Welcome to the Hatch Game! 🥚🐣🐥")
+                let randomNumbers = generateRandomNumbers()
+                var gameInPrograss = true
+                
+                while gameInPrograss {
                 guard let userAnswer = getUserNumbers() else { continue } // 원하는 유저 앤서를 못 받으면 다시 while의 처음으로 돌아가는 코드
                 
                 let result = compareNumbers(randomNumbers: randomNumbers, userAnswer: userAnswer)
@@ -44,14 +50,18 @@ struct BaseballGame {
                 
                 if userAnswer == randomNumbers {
                     print("congratulations! All eggs hatched. Quit the game.")
-                    break
+                    
+                    gameInPrograss = false
                 }
+            }
                 
             case "2":
                 print("not ready")
                 
             case "3":
-                print("not ready")
+                print("Exiting the Hatch Game. Goodbye! 🐥🐣🥚")
+                isGameRunning = false
+                
             default:
                 print("Please enter the correct number.")
             }
