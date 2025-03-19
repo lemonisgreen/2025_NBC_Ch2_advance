@@ -14,28 +14,45 @@ struct BaseballGame {
         
         print("""
                 🍋 Welcom to LEMONY's Hatch Game 
-
+                Your mission: Decode the 3-digit secret number to hatch the eggs!
+            
                 [Rules] 
+                  
+                Enter 3 different numbers between 0 to 9
+                ** Notice! The secret code does not start with 0(zero) **
+            
                 🐥 = correct number, correct position. 
                 🐣 = correct number, wrong position. 
                 🥚 = wrong number, wrong position.
+            
             """)
         
         while true {
-            guard let userAnswer = getUserNumbers() else { continue } // 유저 앤서를 못 받으면 다시 while의 처음으로 돌아가는 코드
+            guard let userAnswer = getUserNumbers() else { continue } // 원하는 유저 앤서를 못 받으면 다시 while의 처음으로 돌아가는 코드
             
             let result = compareNumbers(randomNumbers: randomNumbers, userAnswer: userAnswer)
-                print(result)
+            print(result)
             
             if userAnswer == randomNumbers {
                 print("congratulations! All eggs hatched. Quit the game.")
                 break
             }
         }
-        
-        
     }
+    
     func generateRandomNumbers() -> [Int] {
+        var randomNumbers: [Int] = []
+        
+        randomNumbers.append(Int.random(in: 1...9))
+        // 미리 랜덤 넘버스 바구니에 0을 뺀 랜덤 숫자 하나 담고 시작
+        
+        while randomNumbers.count < 3 {
+            var numbers = Int.random(in: 0...9)
+            if !randomNumbers.contains(numbers) {
+                randomNumbers.append(numbers)
+            }
+        }
+        return randomNumbers
         
         /**
          Set을 사용해서 만들면?
@@ -54,20 +71,11 @@ struct BaseballGame {
          어레이로 만든 코드에 있는 if문 (중복 숫자 제거)이 생략되고, 마지막 리턴 값을 어레이에 다시 담아주는 코드 추가.
          랜덤 숫자 생성 변수 선언시 var, let 둘 다 가능 -> 중복 검사 후 append할 일이 없으므로.
          */
-
-        var randomNumbers: [Int] = []
-               
-        while randomNumbers.count < 3 {
-            var numbers = Int.random(in: 1...9)
-            if !randomNumbers.contains(numbers) {
-                randomNumbers.append(numbers)
-            }
-        }
-        return randomNumbers
     }
     
+    
     func getUserNumbers() -> [Int]? {
-        print ("Please enter 3 different numbers between 1 to 9 ")
+        print ("Please enter 3 different numbers between 0 to 9 ")
         
         guard let userNumbers = readLine() else {
             return nil
@@ -84,8 +92,8 @@ struct BaseballGame {
             return nil
         }
         // .allSatisty = collection 타입에서 컬렉션의 모든 요소가 주어진 조건을 만족하느냐 ~= 패턴매칭연산자. 주로 switch문에서 사용되며, 특정 값이 범위 내에 포함되어 있는지 확인할 때 씀
-        guard userAnswer.allSatisfy({ 1...9 ~= $0 }) else {
-            print ("Please enter numbers between 1 to 9")
+        guard userAnswer.allSatisfy({ 0...9 ~= $0 }) else {
+            print ("Please enter numbers between 0 to 9")
             return nil
         }
         
@@ -109,7 +117,7 @@ struct BaseballGame {
             }
         }
         if fullHatch == 0 && halfHatch == 0 {
-            return "🥚"
+            return "🥚🥚🥚"
         } else {
             return String(repeating: "🐥", count: fullHatch) + String(repeating: "🐣", count: halfHatch)
         }
