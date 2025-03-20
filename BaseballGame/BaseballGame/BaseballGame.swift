@@ -7,12 +7,20 @@
 
 import Foundation
 
-struct BaseballGame {
+class BaseballGame {
+    
+    var gameHistory: [(Int, Int)] = []
+    var gameRunningCount = 0
+    var compareNumberCount = 0
     
     func start() {
-        let randomNumbers = generateRandomNumbers()
-
+        var systemRunning = true
+        
+        while systemRunning {
+        // 조건에 따라 언제 끝날지 모르니까... while문 쓰기
+            
         print("""
+            
                 🍋 Welcom to LEMONY's Hatch Game 
                 Your mission: Decode the 3-digit secret number to hatch the eggs!
             
@@ -30,28 +38,56 @@ struct BaseballGame {
                 1. START GAME  2. GAME HISTORY  3. EXIT GAME
             
             """)
-        var isGameRunning = true
-        while isGameRunning {
+            
             print("Please select option number.")
-            guard let selectedOptionNumber = readLine() else { continue }
+            guard let selectedOptionNumber = readLine() else { continue } // 마찬가지로 원하는 옵션 넘버를 못 받으면 다시 돌아감
+            
             switch selectedOptionNumber {
             case "1":
-                print("Welcome to the Hatch Game! 🐥🐣🥚")
-                guard let userAnswer = getUserNumbers() else { continue } // 원하는 유저 앤서를 못 받으면 다시 while의 처음으로 돌아가는 코드
+                gameRunningCount += 1 // 게임 시작시 게임 횟수 카운트
+                compareNumberCount = 0 // 게임 내부에서의 시도 횟수는 초기화
                 
+                var gameRunning = true
+                print("Welcome to the Hatch Game! 🥚🐣🐥")
+                let randomNumbers = generateRandomNumbers()
+                //system과 game 분리를 안 해주면 게임 중간에 다시 system으로 넘어가서 초기 옵션 값을 선택하라는 문구가 나옴,,!! while루프 구분
+                
+                while gameRunning {
+                guard let userAnswer = getUserNumbers() else { continue } // 원하는 유저 앤서를 못 받으면 다시 while의 처음으로 돌아가는 코드
                 let result = compareNumbers(randomNumbers: randomNumbers, userAnswer: userAnswer)
                 print(result)
                 
                 if userAnswer == randomNumbers {
-                    print("congratulations! All eggs hatched. Quit the game.")
-                    break
+                    print("congratulations! All eggs hatched. Quit the game and go to the main.")
+                
+                    gameHistory.append((gameRunningCount, compareNumberCount))
+                    gameRunning = false
                 }
+            }
                 
             case "2":
-                print("not ready")
-                
+                if gameRunningCount == 0 {
+                    print("\n\n=== HISTORY ===\n\n")
+                    print("No game history.")
+                    print("\n\n================\n\n")
+                } else {
+                    for (gameRunningCount, compareNumberCount) in gameHistory {
+                        print("\n\n=== HISTORY ===\n\n")
+                        print("Game No.\(gameRunningCount), Attempt number: \(compareNumberCount)")
+                        print("\n\n================\n\n")
+                    }
+                }
+
             case "3":
-                print("not ready")
+                print("Are you sure? This will delete all game history.\nif you're really sure, press 'yes' \nor if not, press any key")
+                guard let userChoose = readLine() else { continue }
+                if userChoose == "yes" {
+                    print("Exiting the Hatch Game. Goodbye! 🐥🐣🥚")
+                    systemRunning = false
+                } else {
+                    
+                }
+                
             default:
                 print("Please enter the correct number.")
             }
@@ -115,6 +151,11 @@ struct BaseballGame {
             return nil
         }
         
+        guard userAnswer[0] != 0 else {
+            print ("Notice! The secret code does not start with 0(zero) Try again")
+            return nil
+        }
+        
         guard Set(userAnswer).count == Array(userAnswer).count && Set(userAnswer).count == 3 else {
             print("Please enter 3 different numbers")
             return nil
@@ -137,6 +178,10 @@ struct BaseballGame {
                 unhatch += 1
             }
         }
+        
+        compareNumberCount += 1
+        
         return String(repeating: "🐥", count: fullHatch) + String(repeating: "🐣", count: halfHatch) + String(repeating: "🥚", count: unhatch)
+        + "\nAttempt number: \(compareNumberCount)"
     }
 }
