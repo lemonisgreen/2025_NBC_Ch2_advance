@@ -5,18 +5,18 @@
 
 # LEMONY's Hatch Game
 
->                🍋 Welcom to LEMONY's Hatch Game 
-                Your mission: Decode the 3-digit secret number to hatch the eggs!
+🍋 Welcom to LEMONY's Hatch Game 
+Your mission: Decode the 3-digit secret number to hatch the eggs!
             
-                [Rules] 
+[Rules] 
                   
-                Enter 3 different numbers between 0 and 9 until all the eggs are hatched.
-                ** Notice! The secret code does not start with 0(zero) **
+Enter 3 different numbers between 0 and 9 until all the eggs are hatched.
+** Notice! The secret code does not start with 0(zero) **
             
-                🐥 = correct number, correct position. 
-                🐣 = correct number, wrong position. 
-                🥚 = wrong number, wrong position.
-                ** Notice! The position of the eggs is not related to the position of the numbers.
+🐥 = correct number, correct position. 
+🐣 = correct number, wrong position. 
+🥚 = wrong number, wrong position.
+** Notice! The position of the eggs is not related to the position of the numbers.
 
 ---
 
