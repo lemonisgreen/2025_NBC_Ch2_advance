@@ -52,15 +52,13 @@ class BaseballGame {
                 let randomNumbers = generateRandomNumbers()
                 //system과 game 분리를 안 해주면 게임 중간에 다시 system으로 넘어가서 초기 옵션 값을 선택하라는 문구가 나옴,,!! while루프 구분
                 
-                compareNumberCount = 0 // 게임이 시작되면 compareNumCount 초기화
-                
                 while gameRunning {
                 guard let userAnswer = getUserNumbers() else { continue } // 원하는 유저 앤서를 못 받으면 다시 while의 처음으로 돌아가는 코드
                 let result = compareNumbers(randomNumbers: randomNumbers, userAnswer: userAnswer)
                 print(result)
                 
                 if userAnswer == randomNumbers {
-                    print("congratulations! All eggs hatched. Quit the game.")
+                    print("congratulations! All eggs hatched. Quit the game and go to the main.")
                 
                     gameHistory.append((gameRunningCount, compareNumberCount))
                     gameRunning = false
@@ -81,8 +79,14 @@ class BaseballGame {
                 }
 
             case "3":
-                print("Exiting the Hatch Game. Goodbye! 🐥🐣🥚")
-                systemRunning = false
+                print("Are you sure? This will delete all game history.\nif you're really sure, press 'yes' \nor if not, press any key")
+                guard let userChoose = readLine() else { continue }
+                if userChoose == "yes" {
+                    print("Exiting the Hatch Game. Goodbye! 🐥🐣🥚")
+                    systemRunning = false
+                } else {
+                    
+                }
                 
             default:
                 print("Please enter the correct number.")
