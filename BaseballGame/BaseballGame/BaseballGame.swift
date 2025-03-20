@@ -126,6 +126,11 @@ struct BaseballGame {
             return nil
         }
         
+        guard userAnswer[0] != 0 else {
+            print ("Notice! The secret code does not start with 0(zero) Try again")
+            return nil
+        }
+        
         guard Set(userAnswer).count == Array(userAnswer).count && Set(userAnswer).count == 3 else {
             print("Please enter 3 different numbers")
             return nil
