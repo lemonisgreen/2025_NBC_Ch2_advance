@@ -7,14 +7,20 @@
 
 import Foundation
 
-struct BaseballGame {
+class BaseballGame {
+    
+    var gameHistory: [(Int, Int)] = []
+    var gameRunningCount = 0
+    var compareNumberCount = 0
     
     func start() {
         var systemRunning = true
+        
         while systemRunning {
         // 조건에 따라 언제 끝날지 모르니까... while문 쓰기
             
         print("""
+            
                 🍋 Welcom to LEMONY's Hatch Game 
                 Your mission: Decode the 3-digit secret number to hatch the eggs!
             
@@ -38,27 +44,42 @@ struct BaseballGame {
             
             switch selectedOptionNumber {
             case "1":
+                gameRunningCount += 1 // 게임 시작시 게임 횟수 카운트
+                compareNumberCount = 0 // 게임 내부에서의 시도 횟수는 초기화
+                
+                var gameRunning = true
                 print("Welcome to the Hatch Game! 🥚🐣🐥")
                 let randomNumbers = generateRandomNumbers()
                 //system과 game 분리를 안 해주면 게임 중간에 다시 system으로 넘어가서 초기 옵션 값을 선택하라는 문구가 나옴,,!! while루프 구분
-                var gameRunning = true
+                
+                compareNumberCount = 0 // 게임이 시작되면 compareNumCount 초기화
                 
                 while gameRunning {
                 guard let userAnswer = getUserNumbers() else { continue } // 원하는 유저 앤서를 못 받으면 다시 while의 처음으로 돌아가는 코드
-                
                 let result = compareNumbers(randomNumbers: randomNumbers, userAnswer: userAnswer)
                 print(result)
                 
                 if userAnswer == randomNumbers {
                     print("congratulations! All eggs hatched. Quit the game.")
-                    
+                
+                    gameHistory.append((gameRunningCount, compareNumberCount))
                     gameRunning = false
                 }
             }
                 
             case "2":
-                print("not ready")
-                
+                if gameRunningCount == 0 {
+                    print("\n\n=== HISTORY ===\n\n")
+                    print("No game history.")
+                    print("\n\n================\n\n")
+                } else {
+                    for (gameRunningCount, compareNumberCount) in gameHistory {
+                        print("\n\n=== HISTORY ===\n\n")
+                        print("Game No.\(gameRunningCount), Attempt number: \(compareNumberCount)")
+                        print("\n\n================\n\n")
+                    }
+                }
+
             case "3":
                 print("Exiting the Hatch Game. Goodbye! 🐥🐣🥚")
                 systemRunning = false
@@ -153,6 +174,10 @@ struct BaseballGame {
                 unhatch += 1
             }
         }
+        
+        compareNumberCount += 1
+        
         return String(repeating: "🐥", count: fullHatch) + String(repeating: "🐣", count: halfHatch) + String(repeating: "🥚", count: unhatch)
+        + "\nAttempt number: \(compareNumberCount)"
     }
 }
