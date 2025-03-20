@@ -10,8 +10,8 @@ import Foundation
 struct BaseballGame {
     
     func start() {
-        var isGameRunning = true
-        while isGameRunning {
+        var systemRunning = true
+        while systemRunning {
         // 조건에 따라 언제 끝날지 모르니까... while문 쓰기
             
         print("""
@@ -40,9 +40,10 @@ struct BaseballGame {
             case "1":
                 print("Welcome to the Hatch Game! 🥚🐣🐥")
                 let randomNumbers = generateRandomNumbers()
-                var gameInPrograss = true
+                //system과 game 분리를 안 해주면 게임 중간에 다시 system으로 넘어가서 초기 옵션 값을 선택하라는 문구가 나옴,,!! while루프 구분
+                var gameRunning = true
                 
-                while gameInPrograss {
+                while gameRunning {
                 guard let userAnswer = getUserNumbers() else { continue } // 원하는 유저 앤서를 못 받으면 다시 while의 처음으로 돌아가는 코드
                 
                 let result = compareNumbers(randomNumbers: randomNumbers, userAnswer: userAnswer)
@@ -51,7 +52,7 @@ struct BaseballGame {
                 if userAnswer == randomNumbers {
                     print("congratulations! All eggs hatched. Quit the game.")
                     
-                    gameInPrograss = false
+                    gameRunning = false
                 }
             }
                 
@@ -60,7 +61,7 @@ struct BaseballGame {
                 
             case "3":
                 print("Exiting the Hatch Game. Goodbye! 🐥🐣🥚")
-                isGameRunning = false
+                systemRunning = false
                 
             default:
                 print("Please enter the correct number.")
